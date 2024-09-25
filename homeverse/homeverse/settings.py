@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "api",
     # package
     "rest_framework",
+    "rest_framework.authtoken",
     "corsheaders",
 ]
 
