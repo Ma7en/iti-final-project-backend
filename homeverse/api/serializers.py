@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import *
 
 
+# =================================================================
+# *** Authentication ***
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -19,6 +21,14 @@ class UserSerializer(serializers.ModelSerializer):
         print(validated_data)
         user = User.objects.create_user(**validated_data)
         return user
+
+
+# =================================================================
+# *** Project ***
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
 
 
 class ProjectSerializer(serializers.ModelSerializer):

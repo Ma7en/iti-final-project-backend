@@ -20,14 +20,24 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 from django.urls import path, include
-from api.views import CreateUserView
+
+#
+from api.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # ==============================================
+    # *** Authentication ***
     path("api/user/register/", CreateUserView.as_view(), name="register"),
     path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
     path("api/", include("api.urls")),
+    # ==============================================
+    # *** Project ***
+    # path("api/projects/", ProjectListCreate.as_view(), name="project-list"),
+    # path(
+    #     "api/projects/delete/<int:pk>", ProjectDelete.as_view(), name="project-delete"
+    # ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
