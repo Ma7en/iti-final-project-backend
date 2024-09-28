@@ -503,6 +503,18 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
+```
+django_proj
+```
+
+```
+django_proj@gmail.com
+```
+
+```
+django@@1
+```
+
 `Step 8` : Run Server.
 
 ```

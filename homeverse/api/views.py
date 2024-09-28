@@ -31,6 +31,16 @@ from api import serializer as api_serializer
 from api import models as api_models
 
 
+# =================================================================
+# *** Admin ***
+@api_view(["GET"])
+def get_current_user(request):
+    user = request.user
+    return Response({"username": user.username, "is_superuser": user.is_superuser})
+
+
+# =================================================================
+# *** Authentication ***
 # This code defines a DRF View class called MyTokenObtainPairView, which inherits from TokenObtainPairView.
 class MyTokenObtainPairView(TokenObtainPairView):
     # Here, it specifies the serializer class to be used with this view.
@@ -135,9 +145,9 @@ class PasswordChangeView(generics.CreateAPIView):
             )
 
 
+# =================================================================
+# *** project ***
 ######################## Post APIs ########################
-
-
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = api_serializer.CategorySerializer
     permission_classes = [AllowAny]
