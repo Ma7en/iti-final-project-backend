@@ -2,7 +2,7 @@
 URL configuration for homeverse project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -15,29 +15,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.contrib import admin
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from django.contrib import admin
-from django.urls import path, include
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
-#
-from api.views import *
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Blog Backend APIs",
+        default_version="v1",
+        description="This is the documentation for the backend API",
+        terms_of_service="http://mywbsite.com/policies/",
+        contact=openapi.Contact(email="desphixs@gmail.com"),
+        license=openapi.License(name="BSD Licence"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
+    path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("admin/", admin.site.urls),
-    # ==============================================
-    # *** Authentication ***
-    path("api/user/register/", CreateUserView.as_view(), name="register"),
-    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
-    path("api-auth/", include("rest_framework.urls")),
-    path("api/", include("api.urls")),
-    # ==============================================
-    # *** Project ***
-    # path("api/projects/", ProjectListCreate.as_view(), name="project-list"),
-    # path(
-    #     "api/projects/delete/<int:pk>", ProjectDelete.as_view(), name="project-delete"
-    # ),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path("api/v1/", include("api.urls")),
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

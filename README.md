@@ -341,6 +341,38 @@ python-dotenv
 ```
 
 ```
+pip install django-jazzmin
+```
+
+```
+pip install drf-yasg
+```
+
+```
+pip install --upgrade setuptools
+```
+
+```
+pip install django-anymail
+```
+
+```
+pip install django-storages
+```
+
+```
+pip install django-ckeditor-5
+```
+
+```
+pip install environs
+```
+
+```
+pip install djangorestframework-simplejwt
+```
+
+```
 pip install django-crispy-forms
 ```
 
