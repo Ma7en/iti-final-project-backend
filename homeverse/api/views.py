@@ -199,6 +199,12 @@ class CategoryUpdateAPIView(generics.UpdateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+# views.py
+class CategoryDetailAPIView(generics.RetrieveAPIView):
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
+
+
 # Delete a category
 class CategoryDeleteAPIView(generics.DestroyAPIView):
     queryset = api_models.Category.objects.all()
