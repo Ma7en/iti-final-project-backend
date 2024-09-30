@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 from api import views as api_views
 
+
 urlpatterns = [
     # Userauths API Endpoints
     path(
@@ -24,7 +25,48 @@ urlpatterns = [
         api_views.PasswordChangeView.as_view(),
         name="password_reset",
     ),
+    # category
+    path(
+        "category/list/", api_views.CategoryListAPIView.as_view(), name="category-list"
+    ),
+    path(
+        "category/create/",
+        api_views.CategoryCreateAPIView.as_view(),
+        name="category-create",
+    ),
+    path(
+        "category/update/<int:pk>/",
+        api_views.CategoryUpdateAPIView.as_view(),
+        name="category-update",
+    ),
+    path(
+        "category/delete/<int:pk>/",
+        api_views.CategoryDeleteAPIView.as_view(),
+        name="category-delete",
+    ),
+    # category
+    path(
+        "categories/",
+        api_views.CategoryListCreateAPIView.as_view(),
+        name="category-list-create",
+    ),
+    path(
+        "categories/<slug:slug>/",
+        api_views.CategoryRetrieveUpdateAPIView.as_view(),
+        name="category-detail-update",
+    ),
     # Post Endpoints
+    # path(
+    #     "post/category/list/",
+    #     api_views.CategoryListCreateAPIView.as_view(),
+    #     name="category-list-create",
+    # ),
+    # path(
+    #     "post/category/<slug:slug>/",
+    #     api_views.CategoryRetrieveUpdateDestroyAPIView.as_view(),
+    #     name="category-detail",
+    # ),
+    #
     path("post/category/list/", api_views.CategoryListAPIView.as_view()),
     path(
         "post/category/posts/<category_slug>/",

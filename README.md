@@ -504,11 +504,11 @@ python manage.py createsuperuser
 ```
 
 ```
-django_proj
+django_proj@gmail.com
 ```
 
 ```
-django_proj@gmail.com
+django_proj
 ```
 
 ```

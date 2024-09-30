@@ -14,7 +14,11 @@ from rest_framework.decorators import api_view, APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -29,6 +33,8 @@ import random
 # Custom Imports
 from api import serializer as api_serializer
 from api import models as api_models
+from .models import *
+from .serializer import CategorySerializer
 
 
 # =================================================================
@@ -146,8 +152,50 @@ class PasswordChangeView(generics.CreateAPIView):
 
 
 # =================================================================
-# *** project ***
-######################## Post APIs ########################
+# *** Category3 ***
+
+
+# *** Category List and Create ***
+class CategoryListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
+
+
+# *** Category Retrieve, Update, and Delete ***
+class CategoryRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
+
+
+# =================================================================
+# *** Category2 ***
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+# Create a category
+class CategoryCreateAPIView(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+# Update a category
+class CategoryUpdateAPIView(generics.UpdateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+# Delete a category
+class CategoryDeleteAPIView(generics.DestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+# =================================================================
+# *** Category ***
 class CategoryListAPIView(generics.ListAPIView):
     serializer_class = api_serializer.CategorySerializer
     permission_classes = [AllowAny]
@@ -156,6 +204,22 @@ class CategoryListAPIView(generics.ListAPIView):
         return api_models.Category.objects.all()
 
 
+class CategoryListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class CategoryRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_field = "slug"
+
+
+# =================================================================
+# *** project ***
+######################## Post APIs ########################
 class PostCategoryListAPIView(generics.ListAPIView):
     serializer_class = api_serializer.PostSerializer
     permission_classes = [AllowAny]
