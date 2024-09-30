@@ -9,6 +9,10 @@ wvenv
 wvenv/
 venv
 venv/
+image/*
+!image/default-user.jpg
+!image/special-folder/
+
 
 
 # Distribution / packaging

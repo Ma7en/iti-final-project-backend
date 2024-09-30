@@ -128,6 +128,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "details",
             "image",
             "slug",
             "post_count",

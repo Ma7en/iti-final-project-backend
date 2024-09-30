@@ -25,7 +25,7 @@ urlpatterns = [
         api_views.PasswordChangeView.as_view(),
         name="password_reset",
     ),
-    # category
+    #  -> run
     path(
         "category/list/", api_views.CategoryListAPIView.as_view(), name="category-list"
     ),

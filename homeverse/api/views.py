@@ -33,8 +33,9 @@ import random
 # Custom Imports
 from api import serializer as api_serializer
 from api import models as api_models
-from .models import *
-from .serializer import CategorySerializer
+
+# from .models import *
+# from .serializer import CategorySerializer
 
 
 # =================================================================
@@ -157,23 +158,23 @@ class PasswordChangeView(generics.CreateAPIView):
 
 # *** Category List and Create ***
 class CategoryListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
     permission_classes = [AllowAny]
 
 
 # *** Category Retrieve, Update, and Delete ***
 class CategoryRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
     permission_classes = [AllowAny]
 
 
 # =================================================================
-# *** Category2 ***
+# *** Category2 -> run ***
 class CategoryListAPIView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
 
     def post(self, request, *args, **kwargs):
         if "image" not in request.FILES:
@@ -183,14 +184,14 @@ class CategoryListAPIView(generics.ListAPIView):
 
 # Create a category
 class CategoryCreateAPIView(generics.CreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
 
 
 # Update a category
 class CategoryUpdateAPIView(generics.UpdateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
 
     def post(self, request, *args, **kwargs):
         if "image" not in request.FILES:
@@ -200,8 +201,8 @@ class CategoryUpdateAPIView(generics.UpdateAPIView):
 
 # Delete a category
 class CategoryDeleteAPIView(generics.DestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
 
 
 # =================================================================
@@ -215,14 +216,14 @@ class CategoryListAPIView(generics.ListAPIView):
 
 
 class CategoryListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class CategoryRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = "slug"
 
