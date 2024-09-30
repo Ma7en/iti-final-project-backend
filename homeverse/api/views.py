@@ -175,6 +175,11 @@ class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def post(self, request, *args, **kwargs):
+        if "image" not in request.FILES:
+            return Response({"error": "Image file is required."}, status=400)
+        return super().post(request, *args, **kwargs)
+
 
 # Create a category
 class CategoryCreateAPIView(generics.CreateAPIView):
@@ -186,6 +191,11 @@ class CategoryCreateAPIView(generics.CreateAPIView):
 class CategoryUpdateAPIView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def post(self, request, *args, **kwargs):
+        if "image" not in request.FILES:
+            return Response({"error": "Image file is required."}, status=400)
+        return super().post(request, *args, **kwargs)
 
 
 # Delete a category
