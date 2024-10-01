@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.utils.html import mark_safe
 from django.utils.text import slugify
+from django.core.validators import RegexValidator
 
 from shortuuid.django_fields import ShortUUIDField
 import shortuuid
@@ -33,10 +34,20 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.FileField(
-        upload_to="image", default="default/default-user.jpg", null=True, blank=True
+        upload_to="user", default="user/default-user.jpg", null=True, blank=True
     )
     full_name = models.CharField(max_length=100, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+    phone = models.CharField(
+        max_length=12,
+        validators=[
+            RegexValidator(
+                regex="^01[0|1|2|5][0-9]{8}$",
+                message="Phone must be start 010, 011, 012, 015 and all number contains 11 digits",
+            )
+        ],
+        blank=True,
+    )
     about = models.TextField(null=True, blank=True)
     author = models.BooleanField(default=False)
     country = models.CharField(max_length=100, null=True, blank=True)
@@ -57,7 +68,7 @@ class Profile(models.Model):
 
     def thumbnail(self):
         return mark_safe(
-            '<img src="/media/%s" width="50" height="50" object-fit:"cover" style="border-radius: 30px; object-fit: cover;" />'
+            '<img src="/media/user/%s" width="50" height="50" object-fit:"cover" style="border-radius: 30px; object-fit: cover;" />'
             % (self.image)
         )
 
@@ -80,7 +91,7 @@ post_save.connect(save_user_profile, sender=User)
 class Category(models.Model):
     title = models.CharField(max_length=300)
     details = models.CharField(max_length=30000, null=True, blank=True)
-    image = models.FileField(upload_to="image", null=True, blank=True)
+    image = models.FileField(upload_to="category", null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def __str__(self):
