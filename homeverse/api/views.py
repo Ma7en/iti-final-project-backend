@@ -309,6 +309,8 @@ class PostCommentAPIView(APIView):
             properties={
                 "post_id": openapi.Schema(type=openapi.TYPE_INTEGER),
                 "name": openapi.Schema(type=openapi.TYPE_STRING),
+                "title": openapi.Schema(type=openapi.TYPE_STRING),
+                "description": openapi.Schema(type=openapi.TYPE_STRING),
                 "email": openapi.Schema(type=openapi.TYPE_STRING),
                 "comment": openapi.Schema(type=openapi.TYPE_STRING),
             },
@@ -318,6 +320,8 @@ class PostCommentAPIView(APIView):
         # Get data from request.data (frontend)
         post_id = request.data["post_id"]
         name = request.data["name"]
+        title = request.data["title"]
+        description = request.data["description"]
         email = request.data["email"]
         comment = request.data["comment"]
 
@@ -327,6 +331,8 @@ class PostCommentAPIView(APIView):
         api_models.Comment.objects.create(
             post=post,
             name=name,
+            title=title,
+            description=description,
             email=email,
             comment=comment,
         )
@@ -339,7 +345,7 @@ class PostCommentAPIView(APIView):
         )
 
         # Return response back to the frontend
-        return Response({"message": "Commented Sent"}, status=status.HTTP_201_CREATED)
+        return Response({"message": "Component Sent"}, status=status.HTTP_201_CREATED)
 
 
 class BookmarkPostAPIView(APIView):
@@ -496,6 +502,7 @@ class DashboardPostCreateAPIView(generics.CreateAPIView):
         print(request.data)
         user_id = request.data.get("user_id")
         title = request.data.get("title")
+        price_per_unit = request.data.get("price_per_unit")
         image = request.data.get("image")
         description = request.data.get("description")
         tags = request.data.get("tags")
@@ -504,6 +511,7 @@ class DashboardPostCreateAPIView(generics.CreateAPIView):
 
         print(user_id)
         print(title)
+        print(price_per_unit)
         print(image)
         print(description)
         print(tags)
@@ -516,6 +524,7 @@ class DashboardPostCreateAPIView(generics.CreateAPIView):
         post = api_models.Post.objects.create(
             user=user,
             title=title,
+            price_per_unit=price_per_unit,
             image=image,
             description=description,
             tags=tags,
@@ -542,6 +551,7 @@ class DashboardPostEditAPIView(generics.RetrieveUpdateDestroyAPIView):
         post_instance = self.get_object()
 
         title = request.data.get("title")
+        price_per_unit = request.data.get("price_per_unit")
         image = request.data.get("image")
         description = request.data.get("description")
         tags = request.data.get("tags")
@@ -549,6 +559,7 @@ class DashboardPostEditAPIView(generics.RetrieveUpdateDestroyAPIView):
         post_status = request.data.get("post_status")
 
         print(title)
+        print(price_per_unit)
         print(image)
         print(description)
         print(tags)
@@ -561,6 +572,7 @@ class DashboardPostEditAPIView(generics.RetrieveUpdateDestroyAPIView):
         if image != "undefined":
             post_instance.image = image
         post_instance.description = description
+        post_instance.price_per_unit = price_per_unit
         post_instance.tags = tags
         post_instance.category = category
         post_instance.status = post_status
@@ -569,6 +581,13 @@ class DashboardPostEditAPIView(generics.RetrieveUpdateDestroyAPIView):
         return Response(
             {"message": "Post Updated Successfully"}, status=status.HTTP_200_OK
         )
+
+
+# Delete a category
+class DashboardPostDeleteAPIView(generics.DestroyAPIView):
+    queryset = api_models.Post.objects.all()
+    serializer_class = api_serializer.PostSerializer
+    permission_classes = [AllowAny]
 
 
 {

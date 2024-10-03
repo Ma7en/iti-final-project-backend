@@ -25,6 +25,7 @@ urlpatterns = [
         api_views.PasswordChangeView.as_view(),
         name="password_reset",
     ),
+    # =================================================================
     #  -> run
     path(
         "category/list/", api_views.CategoryListAPIView.as_view(), name="category-list"
@@ -49,29 +50,8 @@ urlpatterns = [
         api_views.CategoryDeleteAPIView.as_view(),
         name="category-delete",
     ),
-    # category
-    path(
-        "categories/",
-        api_views.CategoryListCreateAPIView.as_view(),
-        name="category-list-create",
-    ),
-    path(
-        "categories/<slug:slug>/",
-        api_views.CategoryRetrieveUpdateAPIView.as_view(),
-        name="category-detail-update",
-    ),
-    # Post Endpoints
-    # path(
-    #     "post/category/list/",
-    #     api_views.CategoryListCreateAPIView.as_view(),
-    #     name="category-list-create",
-    # ),
-    # path(
-    #     "post/category/<slug:slug>/",
-    #     api_views.CategoryRetrieveUpdateDestroyAPIView.as_view(),
-    #     name="category-detail",
-    # ),
-    #
+    # =================================================================
+    # package
     path("post/category/list/", api_views.CategoryListAPIView.as_view()),
     path(
         "post/category/posts/<category_slug>/",
@@ -79,6 +59,7 @@ urlpatterns = [
     ),
     path("post/lists/", api_views.PostListAPIView.as_view()),
     path("post/detail/<slug>/", api_views.PostDetailAPIView.as_view()),
+    # path("post/detail/<int:pk>/", api_views.PostDetailAPIView.as_view()),
     path("post/like-post/", api_views.LikePostAPIView.as_view()),
     path("post/comment-post/", api_views.PostCommentAPIView.as_view()),
     path("post/bookmark-post/", api_views.BookmarkPostAPIView.as_view()),
@@ -106,5 +87,9 @@ urlpatterns = [
     path(
         "author/dashboard/post-detail/<user_id>/<post_id>/",
         api_views.DashboardPostEditAPIView.as_view(),
+    ),
+    path(
+        "author/dashboard/post-delete/<user_id>/<int:pk>/",
+        api_views.DashboardPostDeleteAPIView.as_view(),
     ),
 ]

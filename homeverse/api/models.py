@@ -109,6 +109,8 @@ class Category(models.Model):
         return Post.objects.filter(category=self).count()
 
 
+# =================================================================
+# *** project ***
 class Post(models.Model):
     STATUS = (
         ("Active", "Active"),
@@ -122,6 +124,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=100)
     image = models.FileField(upload_to="image", null=True, blank=True)
+    price_per_unit = models.DecimalField(max_digits=15, decimal_places=2)
     description = models.TextField(null=True, blank=True)
     tags = models.CharField(max_length=100)
     category = models.ForeignKey(
@@ -150,14 +153,16 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=300)
+    title = models.CharField(max_length=300)
+    description = models.TextField()
     email = models.CharField(max_length=100)
     comment = models.TextField()
     reply = models.TextField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.post.title} - {self.name}"
+        return f"{self.post.title} - {self.title}"
 
     class Meta:
         verbose_name_plural = "Comment"
