@@ -26,6 +26,8 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from datetime import datetime
 
+from django.contrib.auth.models import AnonymousUser
+
 # Others
 import json
 import random
@@ -611,6 +613,18 @@ author/dashboard/post-delete/${userId}/${id}/
 """
 
 
+def get_queryset(self):
+    user = self.request.user
+
+    # Check if the user is authenticated
+    if isinstance(user, AnonymousUser):
+        return (
+            api_models.RegisterOrder.objects.none()
+        )  # Return an empty queryset for anonymous users
+    else:
+        return api_models.RegisterOrder.objects.filter(user=user)
+
+
 # class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
 #     queryset = api_models.RegisterOrder.objects.all()
 #     serializer_class = api_serializer.RegisterOrderSerializer
@@ -795,7 +809,8 @@ class DashboardRegisterOrderEditAPIView(generics.RetrieveUpdateDestroyAPIView):
         )
 
 
-class RegisterOrderListAPIView(generics.ListAPIView):
+# handle admin
+class RegisterOrderListAdminAPIView(generics.ListAPIView):
     serializer_class = api_serializer.RegisterOrderSerializer
     permission_classes = [AllowAny]
 
@@ -803,7 +818,20 @@ class RegisterOrderListAPIView(generics.ListAPIView):
         return api_models.RegisterOrder.objects.all()
 
 
-class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
+class RegisterOrderListAPIView(generics.ListAPIView):
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return api_models.RegisterOrder.objects.all()
+        else:
+            return api_models.RegisterOrder.objects.filter(user=user)
+
+
+# handle admin
+class RegisterOrderDetailAdminAPIView(generics.RetrieveAPIView):
     serializer_class = api_serializer.RegisterOrderSerializer
     permission_classes = [AllowAny]
 
@@ -815,6 +843,24 @@ class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
         return post
 
 
+class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        slug = self.kwargs["slug"]
+        try:
+            post = api_models.RegisterOrder.objects.get(slug=slug)
+            if user.is_superuser or post.user == user:
+                return post
+            else:
+                raise PermissionDenied("You do not have permission to view this order.")
+        except api_models.RegisterOrder.DoesNotExist:
+            raise NotFound("Order not found.")
+
+
+# handle
 # class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
 #     serializer_class = api_serializer.RegisterOrderSerializer
 #     permission_classes = [AllowAny]
@@ -831,10 +877,22 @@ class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
 
 
 # Delete a category
+# class DashboardRegisterOrderDeleteAPIView(generics.DestroyAPIView):
+#     queryset = api_models.RegisterOrder.objects.all()
+#     serializer_class = api_serializer.PostSerializer
+#     permission_classes = [AllowAny]
+
+
 class DashboardRegisterOrderDeleteAPIView(generics.DestroyAPIView):
-    queryset = api_models.RegisterOrder.objects.all()
-    serializer_class = api_serializer.PostSerializer
-    permission_classes = [AllowAny]
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return api_models.RegisterOrder.objects.all()
+        else:
+            return api_models.RegisterOrder.objects.filter(user=user)
 
 
 {

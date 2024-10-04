@@ -106,8 +106,16 @@ urlpatterns = [
         api_views.DashboardRegisterOrderEditAPIView.as_view(),
     ),
     path(
+        "registerorder/admin/lists/",
+        api_views.RegisterOrderListAdminAPIView.as_view(),
+    ),
+    path(
         "registerorder/lists/",
         api_views.RegisterOrderListAPIView.as_view(),
+    ),
+    path(
+        "registerorder/admin/detail/<slug>/",
+        api_views.RegisterOrderDetailAdminAPIView.as_view(),
     ),
     path(
         "registerorder/detail/<slug>/", api_views.RegisterOrderDetailAPIView.as_view()
