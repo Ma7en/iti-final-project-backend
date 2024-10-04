@@ -203,6 +203,7 @@ class CategoryUpdateAPIView(generics.UpdateAPIView):
 class CategoryDetailAPIView(generics.RetrieveAPIView):
     queryset = api_models.Category.objects.all()
     serializer_class = api_serializer.CategorySerializer
+    lookup_field = "slug"
 
 
 # Delete a category
@@ -586,6 +587,252 @@ class DashboardPostEditAPIView(generics.RetrieveUpdateDestroyAPIView):
 # Delete a category
 class DashboardPostDeleteAPIView(generics.DestroyAPIView):
     queryset = api_models.Post.objects.all()
+    serializer_class = api_serializer.PostSerializer
+    permission_classes = [AllowAny]
+
+
+# =================================================================
+# *** Register Order ***
+"""
+create 
+author/dashboard/post-create/
+update
+author/dashboard/post-detail/${userId}/${param.id}/
+
+list 
+post/lists/
+details
+post/detail/${param.slug}/
+
+detele 
+author/dashboard/post-delete/${userId}/${id}/
+
+
+"""
+
+
+# class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
+#     queryset = api_models.RegisterOrder.objects.all()
+#     serializer_class = api_serializer.RegisterOrderSerializer
+#     permission_classes = [AllowAny]
+
+#     def create(self, request, *args, **kwargs):
+#         print(request.data)
+#         user_id = request.data.get("user_id")
+
+#         full_name = request.data.get("full_name")
+#         phone = request.data.get("phone")
+
+#         governorate = request.data.get("governorate")
+#         city = request.data.get("city")
+#         area = request.data.get("area")
+
+#         typeunit = request.data.get("typeunit")
+#         requiredworks = request.data.get("requiredworks")
+#         skills = request.data.get("skills")
+#         conditionoftheunit = request.data.get("conditionoftheunit")
+
+#         space = request.data.get("space")
+#         numberroom = request.data.get("numberroom")
+#         numberbathroom = request.data.get("numberbathroom")
+
+#         description = request.data.get("description")
+
+#         # title = request.data.get("title")
+#         # price_per_unit = request.data.get("price_per_unit")
+#         # image = request.data.get("image")
+#         # tags = request.data.get("tags")
+#         post_status = request.data.get("post_status")
+
+#         # print(user_id)
+#         # print(title)
+#         # print(price_per_unit)
+#         # print(image)
+#         # print(description)
+#         # print(tags)
+#         # print(post_status)
+
+#         user = api_models.User.objects.get(id=user_id)
+
+#         post = api_models.Post.objects.create(
+#             user=user,
+#             full_name=full_name,
+#             phone=phone,
+#             governorate=governorate,
+#             city=city,
+#             area=area,
+#             typeunit=typeunit,
+#             requiredworks=requiredworks,
+#             skills=skills,
+#             conditionoftheunit=conditionoftheunit,
+#             space=space,
+#             numberroom=numberroom,
+#             numberbathroom=numberbathroom,
+#             description=description,
+#             # title=title,
+#             # price_per_unit=price_per_unit,
+#             # image=image,
+#             # tags=tags,
+#             status=post_status,
+#         )
+
+#         return Response(
+#             {"message": "Register Order Created Successfully"},
+#             status=status.HTTP_201_CREATED,
+#         )
+
+
+class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
+    queryset = api_models.RegisterOrder.objects.all()
+    serializer_class = api_serializer.RegisterOrderSerializer  # إذا كان لديك Serializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            post = api_models.RegisterOrder.objects.create(
+                user_id=request.data["user_id"],
+                full_name=request.data["full_name"],
+                phone=request.data["phone"],
+                governorate=request.data["governorate"],
+                city=request.data["city"],
+                area=request.data["area"],
+                typeunit=request.data["typeunit"],
+                requiredworks=request.data["requiredworks"],
+                skills=request.data["skills"],
+                conditionoftheunit=request.data["conditionoftheunit"],
+                space=request.data["space"],
+                numberroom=request.data["numberroom"],
+                numberbathroom=request.data["numberbathroom"],
+                description=request.data["description"],
+                status=request.data["post_status"],
+            )
+            return Response(
+                {"message": "Order created successfully."},
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
+#     queryset = api_models.RegisterOrder.objects.all()
+#     serializer_class = api_serializer.RegisterOrderSerializer
+#     permission_classes = [AllowAny]
+
+
+class DashboardRegisterOrderEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        user_id = self.kwargs["user_id"]
+        registerorder_id = self.kwargs["registerorder_id"]
+        user = api_models.User.objects.get(id=user_id)
+        return api_models.RegisterOrder.objects.get(user=user, id=registerorder_id)
+
+    def update(self, request, *args, **kwargs):
+        registerorder_instance = self.get_object()
+
+        full_name = request.data.get("full_name")
+        phone = request.data.get("phone")
+
+        governorate = request.data.get("governorate")
+        city = request.data.get("city")
+        area = request.data.get("area")
+
+        typeunit = request.data.get("typeunit")
+        requiredworks = request.data.get("requiredworks")
+        skills = request.data.get("skills")
+        conditionoftheunit = request.data.get("conditionoftheunit")
+
+        space = request.data.get("space")
+        numberroom = request.data.get("numberroom")
+        numberbathroom = request.data.get("numberbathroom")
+
+        description = request.data.get("description")
+
+        title = request.data.get("title")
+        price_per_unit = request.data.get("price_per_unit")
+        image = request.data.get("image")
+        tags = request.data.get("tags")
+        post_status = request.data.get("post_status")
+
+        # print(title)
+        # print(price_per_unit)
+        # print(image)
+        # print(description)
+        # print(tags)
+        # print(category_id)
+        # print(post_status)
+
+        registerorder_instance.full_name = full_name
+        registerorder_instance.phone = phone
+
+        registerorder_instance.governorate = governorate
+        registerorder_instance.city = city
+        registerorder_instance.area = area
+
+        registerorder_instance.typeunit = typeunit
+        registerorder_instance.typeunit = typeunit
+        registerorder_instance.skills = skills
+        registerorder_instance.conditionoftheunit = conditionoftheunit
+
+        registerorder_instance.space = space
+        registerorder_instance.numberroom = numberroom
+        registerorder_instance.numberbathroom = numberbathroom
+
+        registerorder_instance.description = description
+        registerorder_instance.title = title
+        if image != "undefined":
+            registerorder_instance.image = image
+        registerorder_instance.price_per_unit = price_per_unit
+        registerorder_instance.tags = tags
+        registerorder_instance.status = post_status
+        registerorder_instance.save()
+
+        return Response(
+            {"message": "Register Order Updated Successfully"},
+            status=status.HTTP_200_OK,
+        )
+
+
+class RegisterOrderListAPIView(generics.ListAPIView):
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return api_models.RegisterOrder.objects.all()
+
+
+class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = api_serializer.RegisterOrderSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        slug = self.kwargs["slug"]
+        post = api_models.RegisterOrder.objects.get(slug=slug)
+        # post.view += 1
+        post.save()
+        return post
+
+
+# class RegisterOrderDetailAPIView(generics.RetrieveAPIView):
+#     serializer_class = api_serializer.RegisterOrderSerializer
+#     permission_classes = [AllowAny]
+
+#     def get_object(self):
+#         slug = self.kwargs["slug"]
+#         try:
+#             post = api_models.RegisterOrder.objects.get(slug=slug)
+#             post.view += 1
+#             post.save()
+#             return post
+#         except api_models.RegisterOrder.DoesNotExist:
+#             return None  # يمكن تحسين معالجة الأخطاء بإرجاع ردود مناسبة
+
+
+# Delete a category
+class DashboardRegisterOrderDeleteAPIView(generics.DestroyAPIView):
+    queryset = api_models.RegisterOrder.objects.all()
     serializer_class = api_serializer.PostSerializer
     permission_classes = [AllowAny]
 

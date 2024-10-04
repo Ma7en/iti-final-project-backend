@@ -211,3 +211,39 @@ class AuthorStats(serializers.Serializer):
     posts = serializers.IntegerField(default=0)
     likes = serializers.IntegerField(default=0)
     bookmarks = serializers.IntegerField(default=0)
+
+
+# =================================================================
+# *** Register Order ***
+class RegisterOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = api_models.RegisterOrder
+        fields = "__all__"
+        # fields = [
+        #     "id",
+        #     "user",
+        #     "profile",
+        #     "full_name",
+        #     "phone",
+        #     "governorate",
+        #     "numberbathroom",
+        #     "area",
+        #     "typeunit",
+        #     "requiredworks",
+        #     "skills",
+        #     "conditionoftheunit",
+        #     "space",
+        #     "numberroom",
+        #     "numberbathroom",
+        #     "description",
+        #     "status",
+        #     "slug",
+        # ]
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterOrderSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3

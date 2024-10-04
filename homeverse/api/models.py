@@ -196,3 +196,126 @@ class Notification(models.Model):
             return f"{self.type} - {self.post.title}"
         else:
             return "Notification"
+
+
+# =================================================================
+# *** Register Order ***
+""""
+Sure! Here's the translation:
+
+**Type of Residential Unit:**
+- Apartment
+- Full House
+- Villa
+- Roof
+- Administrative
+- Commercial Shop
+
+**Required Works:**
+- Execution only
+- Execution and Design
+- Supervision
+
+**Skills:**
+- Quick execution
+- Material provision
+- Innovative designs
+
+**Condition of the Unit:**
+- Unfinished
+- Semi-finished
+- 3/4 finished
+
+
+"""
+
+
+class RegisterOrder(models.Model):
+    TYPE_UNIT = (
+        ("Apartment", "Apartment"),
+        ("FullHouse", "Full House"),
+        ("Villa", "Villa"),
+        ("Roof", "Roof"),
+        ("Administrative", "Administrative"),
+        ("CommercialShop", "Commercial Shop"),
+    )
+    REQUIRED_WORKS = (
+        ("Executiononly", "Execution only"),
+        ("ExecutionandDesign", "Execution and Design"),
+        ("Supervision", "Supervision"),
+    )
+    SKILLS = (
+        ("Quickexecution", "Quick execution"),
+        ("Materialprovision", "Material provision"),
+        ("Innovativedesigns", "Innovative designs"),
+    )
+    CONDITION_OF_THE_UNIT = (
+        ("Unfinished", "Unfinished"),
+        ("Semi-finished", "Semi-finished"),
+        ("3/4finished", "3/4 finished"),
+    )
+    STATUS = (
+        ("Active", "Active"),
+        ("Draft", "Draft"),
+        ("Disabled", "Disabled"),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    full_name = models.CharField(max_length=100, null=True, blank=True)
+    phone = models.CharField(
+        max_length=12,
+        validators=[
+            RegexValidator(
+                regex="^01[0|1|2|5][0-9]{8}$",
+                message="Phone must be start 010, 011, 012, 015 and all number contains 11 digits",
+            )
+        ],
+        blank=True,
+    )
+
+    governorate = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+    area = models.CharField(max_length=200)
+
+    typeunit = models.CharField(max_length=300, choices=TYPE_UNIT, default="Apartment")
+    requiredworks = models.CharField(
+        max_length=300, choices=REQUIRED_WORKS, default="Executiononly"
+    )
+    skills = models.CharField(max_length=300, choices=SKILLS, default="Quickexecution")
+    conditionoftheunit = models.CharField(
+        max_length=300, choices=CONDITION_OF_THE_UNIT, default="Unfinished"
+    )
+
+    space = models.IntegerField(default=0)
+    numberroom = models.IntegerField(default=0)
+    numberbathroom = models.IntegerField(default=0)
+
+    description = models.TextField(null=True, blank=True)
+
+    # title = models.CharField(max_length=100)
+    # image = models.FileField(upload_to="image", null=True, blank=True)
+    # price_per_unit = models.DecimalField(max_digits=15, decimal_places=2)
+    # tags = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, choices=STATUS, default="Active")
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        verbose_name_plural = "RegisterOrder"
+
+    def save(self, *args, **kwargs):
+        if self.slug == "" or self.slug == None:
+            self.slug = (
+                slugify(self.full_name)
+                + slugify(self.phone)
+                + "-"
+                + shortuuid.uuid()[:2]
+            )
+        super(RegisterOrder, self).save(*args, **kwargs)

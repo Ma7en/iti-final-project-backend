@@ -46,6 +46,10 @@ urlpatterns = [
         name="category-detail",
     ),
     path(
+        "category/detail/<slug>/",
+        api_views.CategoryDetailAPIView.as_view(),
+    ),
+    path(
         "category/delete/<int:pk>/",
         api_views.CategoryDeleteAPIView.as_view(),
         name="category-delete",
@@ -91,5 +95,25 @@ urlpatterns = [
     path(
         "author/dashboard/post-delete/<user_id>/<int:pk>/",
         api_views.DashboardPostDeleteAPIView.as_view(),
+    ),
+    # =================================================================
+    # Register Order
+    path(
+        "registerorder/create/", api_views.DashboardRegisterOrderCreateAPIView.as_view()
+    ),
+    path(
+        "registerorder/update/<user_id>/<post_id>/",
+        api_views.DashboardRegisterOrderEditAPIView.as_view(),
+    ),
+    path(
+        "registerorder/lists/",
+        api_views.RegisterOrderListAPIView.as_view(),
+    ),
+    path(
+        "registerorder/detail/<slug>/", api_views.RegisterOrderDetailAPIView.as_view()
+    ),
+    path(
+        "registerorder/delete/<user_id>/<int:pk>/",
+        api_views.DashboardRegisterOrderDeleteAPIView.as_view(),
     ),
 ]
