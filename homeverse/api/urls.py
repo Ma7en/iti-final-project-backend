@@ -98,6 +98,22 @@ urlpatterns = [
     ),
     # =================================================================
     # Register Order
+    path("ourwork/create/", api_views.OurWorkCreateAPIView.as_view()),
+    path(
+        "ourwork/update/<user_id>/<ourwork_id>/",
+        api_views.OurWorkUpdateAPIView.as_view(),
+    ),
+    path(
+        "ourwork/lists/",
+        api_views.OurWorkListAPIView.as_view(),
+    ),
+    path("ourwork/detail/<slug>/", api_views.OurWorkDetailAPIView.as_view()),
+    path(
+        "ourwork/delete/<user_id>/<int:pk>/",
+        api_views.OurWorkDeleteAPIView.as_view(),
+    ),
+    # =================================================================
+    # Register Order
     path(
         "registerorder/create/", api_views.DashboardRegisterOrderCreateAPIView.as_view()
     ),

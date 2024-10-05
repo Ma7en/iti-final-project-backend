@@ -214,31 +214,27 @@ class AuthorStats(serializers.Serializer):
 
 
 # =================================================================
+# *** Our Work ***
+class OurWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = api_models.OurWork
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super(OurWorkSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
+
+# =================================================================
 # *** Register Order ***
 class RegisterOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = api_models.RegisterOrder
         fields = "__all__"
-        # fields = [
-        #     "id",
-        #     "user",
-        #     "profile",
-        #     "full_name",
-        #     "phone",
-        #     "governorate",
-        #     "numberbathroom",
-        #     "area",
-        #     "typeunit",
-        #     "requiredworks",
-        #     "skills",
-        #     "conditionoftheunit",
-        #     "space",
-        #     "numberroom",
-        #     "numberbathroom",
-        #     "description",
-        #     "status",
-        #     "slug",
-        # ]
 
     def __init__(self, *args, **kwargs):
         super(RegisterOrderSerializer, self).__init__(*args, **kwargs)

@@ -594,6 +594,122 @@ class DashboardPostDeleteAPIView(generics.DestroyAPIView):
 
 
 # =================================================================
+# *** Our Work ***
+
+
+# create
+class OurWorkCreateAPIView(generics.CreateAPIView):
+    queryset = api_models.OurWork.objects.all()
+    serializer_class = api_serializer.OurWorkSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            post = api_models.OurWork.objects.create(
+                user_id=request.data["user_id"],
+                title=request.data["title"],
+                description=request.data["description"],
+                thumbnail=request.data["thumbnail"],
+                image1=request.data["image1"],
+                image2=request.data["image2"],
+                image3=request.data["image3"],
+                image4=request.data["image4"],
+                tags=request.data["tags"],
+                status=request.data["post_status"],
+            )
+            return Response(
+                {"message": "Our Work created successfully."},
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# update
+class OurWorkUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = api_serializer.OurWorkSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        user_id = self.kwargs["user_id"]
+        ourwork_id = self.kwargs["ourwork_id"]
+        user = api_models.User.objects.get(id=user_id)
+        return api_models.OurWork.objects.get(user=user, id=ourwork_id)
+
+    def update(self, request, *args, **kwargs):
+        ourwork_instance = self.get_object()
+
+        title = request.data.get("title")
+        description = request.data.get("description")
+
+        # price_per_unit = request.data.get("price_per_unit")
+        thumbnail = request.data.get("thumbnail")
+
+        image1 = request.data.get("image1")
+        image2 = request.data.get("image2")
+        image3 = request.data.get("image3")
+        image4 = request.data.get("image4")
+
+        tags = request.data.get("tags")
+        post_status = request.data.get("post_status")
+
+        #
+
+        ourwork_instance.title = title
+        ourwork_instance.description = description
+
+        if thumbnail != "undefined":
+            ourwork_instance.thumbnail = thumbnail
+
+        if image1 != "undefined":
+            ourwork_instance.image1 = image1
+        if image2 != "undefined":
+            ourwork_instance.image2 = image2
+        if image3 != "undefined":
+            ourwork_instance.image3 = image3
+        if image4 != "undefined":
+            ourwork_instance.image4 = image4
+
+        # ourwork_instance.price_per_unit = price_per_unit
+        ourwork_instance.tags = tags
+        ourwork_instance.status = post_status
+        ourwork_instance.save()
+
+        return Response(
+            {"message": "Our Work Updated Successfully"},
+            status=status.HTTP_200_OK,
+        )
+
+
+# List
+class OurWorkListAPIView(generics.ListAPIView):
+    serializer_class = api_serializer.OurWorkSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        return api_models.OurWork.objects.all()
+
+
+# Details
+class OurWorkDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = api_serializer.OurWorkSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        slug = self.kwargs["slug"]
+        post = api_models.OurWork.objects.get(slug=slug)
+        # post.view += 1
+        post.save()
+        return post
+
+
+# Delete a our work
+class OurWorkDeleteAPIView(generics.DestroyAPIView):
+    queryset = api_models.OurWork.objects.all()
+    serializer_class = api_serializer.OurWorkSerializer
+    permission_classes = [AllowAny]
+
+
+# =================================================================
 # *** Register Order ***
 """
 create 
@@ -698,7 +814,7 @@ def get_queryset(self):
 
 class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
     queryset = api_models.RegisterOrder.objects.all()
-    serializer_class = api_serializer.RegisterOrderSerializer  # إذا كان لديك Serializer
+    serializer_class = api_serializer.RegisterOrderSerializer
 
     def create(self, request, *args, **kwargs):
         try:

@@ -123,7 +123,7 @@ class Post(models.Model):
         Profile, on_delete=models.CASCADE, null=True, blank=True
     )
     title = models.CharField(max_length=100)
-    image = models.FileField(upload_to="image", null=True, blank=True)
+    image = models.FileField(upload_to="package", null=True, blank=True)
     price_per_unit = models.DecimalField(max_digits=15, decimal_places=2)
     description = models.TextField(null=True, blank=True)
     tags = models.CharField(max_length=100)
@@ -196,6 +196,47 @@ class Notification(models.Model):
             return f"{self.type} - {self.post.title}"
         else:
             return "Notification"
+
+
+# =================================================================
+# *** Our work ***
+class OurWork(models.Model):
+    STATUS = (
+        ("Active", "Active"),
+        ("Draft", "Draft"),
+        ("Disabled", "Disabled"),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    title = models.CharField(max_length=1000)
+    description = models.TextField(null=True, blank=True)
+
+    thumbnail = models.FileField(upload_to="ourwork", null=True, blank=True)
+    image1 = models.FileField(upload_to="ourwork", null=True, blank=True)
+    image2 = models.FileField(upload_to="ourwork", null=True, blank=True)
+    image3 = models.FileField(upload_to="ourwork", null=True, blank=True)
+    image4 = models.FileField(upload_to="ourwork", null=True, blank=True)
+
+    # price_per_unit = models.DecimalField(max_digits=15, decimal_places=2)
+    tags = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, choices=STATUS, default="Active")
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = "OurWork"
+
+    def save(self, *args, **kwargs):
+        if self.slug == "" or self.slug == None:
+            self.slug = slugify(self.title) + "-" + shortuuid.uuid()[:2]
+        super(OurWork, self).save(*args, **kwargs)
 
 
 # =================================================================
