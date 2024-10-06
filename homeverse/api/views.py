@@ -117,7 +117,9 @@ class PasswordEmailVerify(generics.RetrieveAPIView):
             user.reset_token = reset_token
             user.save()
 
-            link = f"http://localhost:3001/changepassword?otp={user.otp}&uidb64={uidb64}&reset_token={reset_token}"
+            # *** edit here ***
+            link = f"http://localhost:3000/changepassword?otp={user.otp}&uidb64={uidb64}&reset_token={reset_token}"
+            # link = f"https://homeverse-1.vercel.app/changepassword?otp={user.otp}&uidb64={uidb64}&reset_token={reset_token}"
 
             merge_data = {
                 "link": link,
@@ -166,111 +168,8 @@ class PasswordChangeView(generics.CreateAPIView):
             )
 
 
-# class PasswordEmailVerify(generics.RetrieveAPIView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = api_serializer.UserSerializer
-
-#     def get_object(self):
-#         email = self.kwargs["email"]
-#         try:
-#             user = api_models.User.objects.get(email=email)
-
-#             if user:
-#                 user.otp = generate_numeric_otp()
-#                 uidb64 = user.pk
-
-#                 # Generate a token and include it in the reset link sent via email
-#                 refresh = RefreshToken.for_user(user)
-#                 reset_token = str(refresh.access_token)
-
-#                 # Store the reset_token in the user model for later verification
-#                 user.reset_token = reset_token
-#                 user.save()
-
-#                 link = f"http://localhost:3001/changepassword?otp={user.otp}&uidb64={uidb64}&reset_token={reset_token}"
-
-#                 merge_data = {
-#                     "link": link,
-#                     "username": user.username,
-#                 }
-#                 subject = f"Password Reset Request"
-#                 text_body = render_to_string("email/password_reset.txt", merge_data)
-#                 html_body = render_to_string("email/password_reset.html", merge_data)
-
-#                 msg = EmailMultiAlternatives(
-#                     subject=subject,
-#                     from_email=settings.FROM_EMAIL,
-#                     to=[user.email],
-#                     body=text_body,
-#                 )
-#                 msg.attach_alternative(html_body, "text/html")
-#                 msg.send()
-
-#             return user
-
-#         except api_models.User.DoesNotExist:
-#             return None
-
-
-# class PasswordChangeView(generics.CreateAPIView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = api_serializer.UserSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         payload = request.data
-
-#         otp = payload.get("otp")
-#         uidb64 = payload.get("uidb64")
-#         password = payload.get("password")
-#         reset_token = payload.get("reset_token")
-
-#         # تحقق من أن كل القيم موجودة
-#         if not otp or not uidb64 or not password or not reset_token:
-#             return Response(
-#                 {"message": "Missing required fields."},
-#                 status=status.HTTP_400_BAD_REQUEST,
-#             )
-
-#         try:
-#             # فك تشفير uidb64
-#             uid = urlsafe_base64_decode(uidb64).decode()
-#             user = api_models.User.objects.get(id=uid, otp=otp)
-
-#             # تحقق من صحة reset_token
-#             if reset_token != user.reset_token:
-#                 return Response(
-#                     {"message": "Invalid reset token."},
-#                     status=status.HTTP_400_BAD_REQUEST,
-#                 )
-
-#         except (TypeError, ValueError, OverflowError, api_models.User.DoesNotExist):
-#             return Response(
-#                 {"message": "Invalid user or OTP."},
-#                 status=status.HTTP_404_NOT_FOUND,
-#             )
-
-#         # إذا كان المستخدم موجوداً
-#         user.set_password(password)
-#         user.otp = ""
-#         user.reset_token = ""  # إبطال reset_token بعد الاستخدام
-#         user.save()
-
-#         return Response(
-#             {"message": "Password Changed Successfully"},
-#             status=status.HTTP_201_CREATED,
-#         )
-
-
 # =================================================================
 # *** send mail ***
-# def send_confirmation_email(user_email):
-#     subject = "Confirm your registration"
-#     message = "Thank you for registering. Please confirm your email by clicking the link below."
-#     from_email = settings.DEFAULT_FROM_EMAIL
-#     recipient_list = [user_email]
-#     send_mail(subject, message, from_email, recipient_list)
-
-
 def send_confirmation_email(user):
     # إنشاء token فريد للمستخدم
     token = default_token_generator.make_token(user)
@@ -280,7 +179,10 @@ def send_confirmation_email(user):
     activation_link = reverse(
         "activate_account", kwargs={"uidb64": uid, "token": token}
     )
+
+    # *** edit here ***
     activation_url = f"http://127.0.0.1:8000{activation_link}"
+    # activation_url = f"https://m9ee9m2.pythonanywhere.com{activation_link}"
 
     subject = "Confirm your registration"
     message = f"Thank you for registering. Please confirm your email by clicking the link below:\n{activation_url}"
@@ -292,44 +194,6 @@ def send_confirmation_email(user):
 
 # =================================================================
 # *** active account ***
-# def activate_account(request, uidb64, token):
-#     try:
-#         uid = urlsafe_base64_decode(uidb64).decode()
-#         user = User.objects.get(pk=uid)
-#     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         user = None
-
-
-#     if user is not None and default_token_generator.check_token(user, token):
-#         user.is_active = True  # تفعيل المستخدم
-#         user.save()
-#         return redirect("login3.html")  # أو أي صفحة بعد التفعيل
-#     else:
-#         # إذا كان الرابط غير صالح
-#         return render(request, "activation_invalid.html")
-# views.py
-
-
-# class ActivateAccountView(APIView):
-#     def get(self, request, uidb64, token):
-#         User = get_user_model()
-#         try:
-#             uid = force_str(urlsafe_base64_decode(uidb64))
-#             user = User.objects.get(pk=uid)
-#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
-
-#         if user is not None and default_token_generator.check_token(user, token):
-#             user.is_active = True
-#             user.save()
-#             return Response(
-#                 {"detail": "Account activated successfully!"}, status=status.HTTP_200_OK
-#             )
-#         else:
-#             return Response(
-#                 {"detail": "Activation link is invalid!"},
-#                 status=status.HTTP_400_BAD_REQUEST,
-#             )
 
 
 class ActivateAccountView(APIView):
@@ -344,11 +208,19 @@ class ActivateAccountView(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
+            # *** edit here ***
             # توجيه المستخدم إلى رابط React بعد التفعيل
             return HttpResponseRedirect("http://localhost:3000/login?activated=true")
+            # return HttpResponseRedirect(
+            #     "https://homeverse-1.vercel.app/login?activated=true"
+            # )
         else:
+            # *** edit here ***
             # إذا كان الرابط غير صالح، يمكن توجيهه إلى صفحة خطأ أو صفحة أخرى
             return HttpResponseRedirect("http://localhost:3000/error?activation=failed")
+            # return HttpResponseRedirect(
+            #     "https://homeverse-1.vercel.app/error?activation=failed"
+            # )
 
 
 # =================================================================

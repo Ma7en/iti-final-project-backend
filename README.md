@@ -204,19 +204,7 @@ cd homeverse
 `Step 5` : Create Apps.
 
 ```
-python3 manage.py startapp account
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
+python3 manage.py startapp api
 ```
 
 `Step 6` : Create Database.
@@ -272,15 +260,15 @@ python3 manage.py createsuperuser
 ```
 
 ```
-django_proj
+homeverse_proj@gmail.com
 ```
 
 ```
-django_proj@gmail.com
+homeverse_proj
 ```
 
 ```
-django@@1
+homeverse@@1
 ```
 
 `Step 8` : Run Server.
@@ -329,14 +317,41 @@ pip install pillow
 
 ```
 asgiref
+```
+
+```
 Django
+```
+
+```
 django-cors-headers
+```
+
+```
 djangorestframework
+```
+
+```
 djangorestframework-simplejwt
+```
+
+```
 PyJWT
+```
+
+```
 pytz
+```
+
+```
 sqlparse
+```
+
+```
 psycopg2-binary
+```
+
+```
 python-dotenv
 ```
 
@@ -366,6 +381,10 @@ pip install django-ckeditor-5
 
 ```
 pip install environs
+```
+
+```
+pip install django-allauth
 ```
 
 ```
@@ -416,7 +435,6 @@ pip install django-countries
 
 ```
 pip freeze > wrequirements.txt
-
 ```
 
 ```
@@ -437,18 +455,6 @@ cd homeverse
 
 ```
 python manage.py startapp api
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
 ```
 
 `Step 6` : Create Database.
@@ -504,15 +510,15 @@ python manage.py createsuperuser
 ```
 
 ```
-django_proj@gmail.com
+homeverse_proj@gmail.com
 ```
 
 ```
-django_proj
+homeverse_proj
 ```
 
 ```
-django@@1
+homeverse@@1
 ```
 
 `Step 8` : Run Server.
@@ -530,16 +536,16 @@ python manage.py runserver
     <b>User Authentication:</b> Secure registration, login, and password recovery.
 </li>
 <li>
-    <b>Project Creation:</b> 
+    <b>Project Creation:</b>
 </li>
 <li>
     <b>Project Management:</b> Features for viewing, commenting, rating, and reporting projects.
-</li> 
-<li>
-    <b>Homepage:</b> Displays featured, latest, and categorized projects. 
 </li>
 <li>
-    <b>Search:</b> Allows users to find projects by title or tag. 
+    <b>Homepage:</b> Displays featured, latest, and categorized projects.
+</li>
+<li>
+    <b>Search:</b> Allows users to find projects by title or tag.
 </li>
 <li>
     <b>Additional Features:</b> user profiles, and notifications.
@@ -590,7 +596,7 @@ Technologies used in the project:
         </td>
         <td>
             <a href="https://github.com/rehabezzat">Rehab Ezzat</a>
-        </td> 
+        </td>
     </tr>
     <tr>
         <td>
@@ -609,3 +615,4 @@ Technologies used in the project:
         </td>
     </tr>
 </table>
+```
