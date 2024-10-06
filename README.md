@@ -563,6 +563,10 @@ Technologies used in the project:
 
 ---
 
+<p align="left"><img src="https://profile-counter.glitch.me/iti-final-project-babackend/count.svg" alt="desphixs" /></p>
+
+---
+
 <h1>Under The Supervision of:</h1>
 <table>
     <tr>
