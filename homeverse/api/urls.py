@@ -25,6 +25,11 @@ urlpatterns = [
         api_views.PasswordChangeView.as_view(),
         name="password_reset",
     ),
+    path(
+        "activate/<uidb64>/<token>/",
+        api_views.ActivateAccountView.as_view(),
+        name="activate_account",
+    ),
     # =================================================================
     #  -> run
     path(

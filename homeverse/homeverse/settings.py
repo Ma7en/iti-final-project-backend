@@ -55,7 +55,24 @@ INSTALLED_APPS = [
     "anymail",
     "storages",
     "django_ckeditor_5",
+    #
+    "django.contrib.sites",
+    "allauth",
+    # "allauth.account",
+    # "allauth.socialaccount",
 ]
+
+# auth
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_REQUIRED = True
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -184,11 +201,34 @@ ANYMAIL = {
     "MAILERSEND_API_TOKEN": "mlsn.",
 }
 
+# django
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "m9ee9m@gmail.com"
+EMAIL_HOST_PASSWORD = "mpqxfsllvcoldawc"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+FROM_EMAIL = "m9ee9m@gmail.com"
 
-FROM_EMAIL = env("FROM_EMAIL")
-EMAIL_BACKEND = env("EMAIL_BACKEND")
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
-SERVER_EMAIL = env("SERVER_EMAIL")
+# code
+# EMAIL_BACKEND = env("EMAIL_BACKEND")
+# EMAIL_HOST = env("EMAIL_HOST")
+# EMAIL_PORT = env("EMAIL_PORT")
+# EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_USER")
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# FROM_EMAIL = env("FROM_EMAIL")
+# DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+# SERVER_EMAIL = env("SERVER_EMAIL")
+
+# project
+# FROM_EMAIL = env("FROM_EMAIL")
+# EMAIL_BACKEND = env("EMAIL_BACKEND")
+# DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+# SERVER_EMAIL = env("SERVER_EMAIL")
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),

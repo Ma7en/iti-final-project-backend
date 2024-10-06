@@ -22,7 +22,8 @@ class User(AbstractUser):
         return self.email
 
     def save(self, *args, **kwargs):
-        email_username, mobile = self.email.split("@")
+        # email_username, mobile = self.email.split("@")
+        email_username, _ = self.email.split("@")
         if self.full_name == "" or self.full_name == None:
             self.full_name = email_username
         if self.username == "" or self.username == None:
@@ -34,7 +35,7 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.FileField(
-        upload_to="user", default="user/default-user.jpg", null=True, blank=True
+        upload_to="user", default="user/default-user.png", null=True, blank=True
     )
     full_name = models.CharField(max_length=100, null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
