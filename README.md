@@ -255,8 +255,10 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 
+`Step 8` : Create Superuser.
+
 ```
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
 ```
@@ -271,10 +273,26 @@ homeverse_proj
 homeverse@@1
 ```
 
-`Step 8` : Run Server.
+`Step 9` : Run Server.
 
 ```
 python3 manage.py runserver
+```
+
+`Step 10` : Info Admin.
+
+```
+homeverse_proj@gmail.com
+```
+
+```
+homeverse@@1
+```
+
+`Step 11` : Info Server.
+
+```
+m9ee9m+2@gmail.com
 ```
 
 <h3 align="center"> Windows </h3>
@@ -505,6 +523,8 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
+`Step 7` : Create Superuser.
+
 ```
 python manage.py createsuperuser
 ```
@@ -521,10 +541,26 @@ homeverse_proj
 homeverse@@1
 ```
 
-`Step 8` : Run Server.
+`Step 9` : Run Server.
 
 ```
 python manage.py runserver
+```
+
+`Step 10` : Info Admin.
+
+```
+homeverse_proj@gmail.com
+```
+
+```
+homeverse@@1
+```
+
+`Step 11` : Info Server.
+
+```
+m9ee9m+2@gmail.com
 ```
 
 ---
