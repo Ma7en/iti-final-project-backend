@@ -182,7 +182,7 @@ def send_confirmation_email(user):
 
     # *** edit here ***
     activation_url = f"http://127.0.0.1:8000{activation_link}"
-    # activation_url = f"https://m9ee9m2.pythonanywhere.com{activation_link}"
+    # activation_url = f"https://m9ee9m4.pythonanywhere.com{activation_link}"
 
     subject = "Confirm your registration"
     message = f"Thank you for registering. Please confirm your email by clicking the link below:\n{activation_url}"
