@@ -194,8 +194,6 @@ def send_confirmation_email(user):
 
 # =================================================================
 # *** active account ***
-
-
 class ActivateAccountView(APIView):
     def get(self, request, uidb64, token):
         User = get_user_model()
@@ -272,6 +270,12 @@ class CategoryUpdateAPIView(generics.UpdateAPIView):
 
 # views.py
 class CategoryDetailAPIView(generics.RetrieveAPIView):
+    queryset = api_models.Category.objects.all()
+    serializer_class = api_serializer.CategorySerializer
+    # lookup_field = "slug"
+
+
+class CategoryDetailSlugAPIView(generics.RetrieveAPIView):
     queryset = api_models.Category.objects.all()
     serializer_class = api_serializer.CategorySerializer
     lookup_field = "slug"
@@ -902,10 +906,11 @@ class DashboardRegisterOrderCreateAPIView(generics.CreateAPIView):
                 numberroom=request.data["numberroom"],
                 numberbathroom=request.data["numberbathroom"],
                 description=request.data["description"],
+                package=request.data["package"],
                 status=request.data["post_status"],
             )
             return Response(
-                {"message": "Order created successfully."},
+                {"message": "Order Created Successfully."},
                 status=status.HTTP_201_CREATED,
             )
         except Exception as e:

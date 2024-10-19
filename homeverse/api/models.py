@@ -275,21 +275,21 @@ Sure! Here's the translation:
 class RegisterOrder(models.Model):
     TYPE_UNIT = (
         ("Apartment", "Apartment"),
-        ("FullHouse", "Full House"),
+        ("Full House", "Full House"),
         ("Villa", "Villa"),
         ("Roof", "Roof"),
         ("Administrative", "Administrative"),
-        ("CommercialShop", "Commercial Shop"),
+        ("Commercial Shop", "Commercial Shop"),
     )
     REQUIRED_WORKS = (
-        ("Executiononly", "Execution only"),
-        ("ExecutionandDesign", "Execution and Design"),
+        ("Execution only", "Execution only"),
+        ("Execution and Design", "Execution and Design"),
         ("Supervision", "Supervision"),
     )
     SKILLS = (
-        ("Quickexecution", "Quick execution"),
-        ("Materialprovision", "Material provision"),
-        ("Innovativedesigns", "Innovative designs"),
+        ("Quick execution", "Quick execution"),
+        ("Material provision", "Material provision"),
+        ("Innovative designs", "Innovative designs"),
     )
     CONDITION_OF_THE_UNIT = (
         ("Unfinished", "Unfinished"),
@@ -337,6 +337,7 @@ class RegisterOrder(models.Model):
     numberbathroom = models.IntegerField(default=0)
 
     description = models.TextField(null=True, blank=True)
+    package = models.TextField(null=True, blank=True)
 
     # title = models.CharField(max_length=100)
     # image = models.FileField(upload_to="image", null=True, blank=True)

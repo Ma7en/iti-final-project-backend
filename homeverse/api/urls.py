@@ -51,8 +51,8 @@ urlpatterns = [
         name="category-detail",
     ),
     path(
-        "category/detail/<slug>/",
-        api_views.CategoryDetailAPIView.as_view(),
+        "category/detail/slug/<slug>/",
+        api_views.CategoryDetailSlugAPIView.as_view(),
     ),
     path(
         "category/delete/<int:pk>/",
